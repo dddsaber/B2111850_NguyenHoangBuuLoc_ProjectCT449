@@ -242,11 +242,24 @@ const getAllSach = async (req, res) => {
 
     // Đếm tổng số sách phù hợp với điều kiện
     const total = await Sach.countDocuments(searchCondition).exec();
-    // Tìm sách với điều kiện
-    const sachs = await Sach.find(searchCondition)
+    const sachsRecord = await Sach.find(searchCondition)
       .limit(limit ? limit : 100)
       .sort(sortBy ? { [sortBy.field]: sortBy.order } : { createdAt: -1 })
       .exec();
+
+    const sachs = await Promise.all(
+      sachsRecord.map(async (sach) => {
+        const bansaosachs = await BanSaoSach.find({
+          masach: sach._id,
+          sanco: true,
+        });
+
+        return {
+          ...sach.toObject(),
+          sanco: bansaosachs.length,
+        };
+      })
+    );
 
     return response(
       res,

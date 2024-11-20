@@ -21,7 +21,7 @@ class UserService {
   }
 
   async deleteUser(userId) {
-    return await instance.put(`${baseURL}/delete/${userId}`);
+    return await instance.delete(`${baseURL}/delete/${userId}`);
   }
 
   async changeActiveStatus(user) {

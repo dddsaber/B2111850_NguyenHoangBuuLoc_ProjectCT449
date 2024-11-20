@@ -103,6 +103,7 @@
                     <strong>Đơn giá:</strong> {{ book.dongia || "Không rõ"
                     }}<br />
                     <strong>Số quyển:</strong> {{ book.soquyen || 0 }}<br />
+                    <strong>Sẵn có:</strong> {{ book.sanco || 0 }}<br />
                     <strong>Cho mượn:</strong> {{ book.chomuon ? "Có" : "Không"
                     }}<br />
                     <strong>Năm xuất bản:</strong>
