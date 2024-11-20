@@ -55,6 +55,13 @@
           <span v-if="column.dataIndex === 'userType'">
             {{ record.userType == "admin" ? "Thủ thư" : "Độc giả" }}
           </span>
+          <span v-else-if="column.dataIndex === 'avatar'">
+            <a-avatar
+              :src="getSourceUserImage(record.avatar)"
+              alt="Avatar"
+              style="width: 100px; height: 100px"
+            />
+          </span>
           <span v-else-if="column.key === 'action'">
             <a-popconfirm title="Edit" @confirm="handleEditUser(record)">
               <a-button><EditOutlined /></a-button>
@@ -111,6 +118,9 @@
             />
           </a-form-item>
         </a-form>
+
+        <label for="avatar">Avatar: </label>
+        <input type="file" name="avatar" @change="handleImage" />
       </a-modal>
 
       <a-modal
@@ -170,6 +180,7 @@
 import { onMounted, ref, reactive, h } from "vue";
 import userService from "../../services/user.service";
 import theThuVienService from "../../services/thethuvien.service";
+import fileService from "../../services/file.service";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
 import {
@@ -182,6 +193,7 @@ import {
 } from "@ant-design/icons-vue";
 import { notification } from "ant-design-vue";
 
+import { getSourceUserImage } from "../../utils/image";
 export default {
   components: {
     PlusOutlined,
@@ -204,6 +216,7 @@ export default {
       searchKey: "",
       userType: null,
     });
+    const avatar = ref(null);
     const formState = reactive({
       name: "",
       email: "",
@@ -224,9 +237,24 @@ export default {
       email: [{ required: true, message: "Vui lòng nhập email!" }],
     };
 
+    const handleImage = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        avatar.value = file;
+      }
+    };
+
     const handleOk = async () => {
       try {
         const values = await formRef.value.validate();
+
+        if (avatar.value) {
+          const imageResponse = await fileService.uploadFileUser(avatar.value);
+          if (imageResponse.status) {
+            values.avatar = imageResponse.data.image_name;
+          }
+        }
+
         if (selectedUser.value) {
           const response = await userService.updateUser({
             _id: selectedUser.value._id,
@@ -357,6 +385,13 @@ export default {
     });
 
     const columns = [
+      {
+        title: "Avatar",
+        dataIndex: "avatar",
+        key: "avatar",
+        width: 100,
+        height: 100,
+      },
       { title: "Tên", dataIndex: "name", key: "name" },
       { title: "Email", dataIndex: "email", key: "email" },
       { title: "Số điện thoại", dataIndex: "phone", key: "phone" },
@@ -413,6 +448,9 @@ export default {
       triggerReload,
       handleSearch,
       userTypeoptions,
+      avatar,
+      getSourceUserImage,
+      handleImage,
     };
   },
 };

@@ -96,6 +96,11 @@ export default {
         link: "/book-lended",
       });
       menuItems.push({
+        key: "12",
+        label: "Hồ sơ",
+        link: "/profile",
+      });
+      menuItems.push({
         key: "10",
         label: "Đăng xuất",
         link: "/logout",
@@ -110,6 +115,11 @@ export default {
         key: "1",
         label: "Chọn sách",
         link: "/book-select",
+      });
+      menuItems.push({
+        key: "12",
+        label: "Hồ sơ",
+        link: "/profile",
       });
       menuItems.push({
         key: "10",

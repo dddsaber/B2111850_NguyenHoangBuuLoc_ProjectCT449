@@ -161,11 +161,20 @@
             />
           </a-form-item>
           <a-form-item label="Thể loại" name="theloai">
-            <a-input
+            <a-select
               v-model:value="formState.theloai"
-              placeholder="Nhập thể loại"
-            />
+              placeholder="Chọn thể loại"
+            >
+              <a-select-option
+                v-for="option in theloaiOptions"
+                :key="option.key"
+                :value="option.value"
+              >
+                {{ option.value }}
+              </a-select-option>
+            </a-select>
           </a-form-item>
+
           <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-button style="margin-left: 10px" @click="resetFormState"
               >Đặt lại</a-button
@@ -257,9 +266,6 @@ export default {
           }
         }
         if (selectedBook.value) {
-          console.log("update");
-          console.log(values);
-          console.log(selectedBook.value);
           const response = await sachService.update(
             selectedBook.value._id,
             values
@@ -271,9 +277,8 @@ export default {
             });
           }
         } else {
-          console.log("ok");
           const response = await sachService.create(values);
-          console.log(response);
+
           if (response && response.status) {
             notification.success({
               message: "Thành công!",
@@ -333,13 +338,6 @@ export default {
     ]);
     const columns = [
       {
-        title: "STT",
-        dataIndex: "index",
-        key: "index",
-        width: 70,
-        align: "center",
-      },
-      {
         title: "Ảnh",
         dataIndex: "image",
         key: "image",
@@ -365,6 +363,7 @@ export default {
         title: "Trạng thái",
         dataIndex: "chomuon",
         key: "chomuon",
+        width: 90,
         render: (text, record) => (record.chomuon ? "Cho mượn" : "Khóa"),
       },
       {

@@ -1,7 +1,7 @@
 <template>
   <a-layout style="margin: 0">
     <a-layout-header>
-      <h2 style="color: white; margin: 0; padding: 10px">Quản lý sách</h2>
+      <h2 style="color: white; margin: 0; padding: 10px">Mượn sách</h2>
     </a-layout-header>
     <a-space
       :size="10"

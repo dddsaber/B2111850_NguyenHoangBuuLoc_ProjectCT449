@@ -11,6 +11,8 @@ import { store } from "../redux/store";
 import UsersManage from "../components/manage_users/UsersManage.vue";
 import BookLended from "../components/users/BookLended.vue";
 import Register from "../view/auth/Register.vue";
+import UserProfile from "../components/users/UserProfile.vue";
+
 const getUserRole = async () => {
   let user = store.getters["auth/user"];
   const refreshToken = localStorage.getItem("refreshToken");
@@ -105,6 +107,17 @@ const routes = [
         path: "",
         name: "BookSelecting",
         component: BookSelecting,
+      },
+    ],
+  },
+  {
+    path: "/profile",
+    component: MainLayout,
+    children: [
+      {
+        path: "",
+        name: "UserProfile",
+        component: UserProfile,
       },
     ],
   },
